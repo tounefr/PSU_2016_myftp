@@ -5,10 +5,15 @@ RM = rm -f
 SRCS =  main.c \
         util.c \
         socket.c \
+        socket_server.c \
         protocol.c \
-        client.c \
         ftp_socket.c \
-        client_cmd.c
+        ftp_client.c \
+        ftp_server.c \
+        globals.c \
+        path.c \
+        ftp_cmd.c \
+        ftp_data_cmd.c
 
 OBJS = $(SRCS:.c=.o)
 

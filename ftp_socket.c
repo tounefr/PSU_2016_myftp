@@ -1,15 +1,10 @@
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <time.h>
 #include "myftp.h"
 
 static char *allocate_new_command_packet(char *buffer,
                                   unsigned int buffer_size,
-                                  unsigned int limit) {
+                                  unsigned int limit)
+{
     char    *packet;
 
     if (NULL == (packet = malloc(limit + 1)))
@@ -36,7 +31,8 @@ char        *ftp_recv_packet_command(int *fd)
     return NULL;
 }
 
-char socket_data_conn(t_ftp_client *ftp_client) {
+char socket_data_conn(t_ftp_client *ftp_client)
+{
     int fd;
 
     if (!socket_init(&fd))
@@ -47,7 +43,13 @@ char socket_data_conn(t_ftp_client *ftp_client) {
     return 1;
 }
 
-char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port) {
+char send_data_file(t_ftp_client *ftp_client, char *abs_path)
+{
+
+}
+
+char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port)
+{
     char            *pasv_buffer;
     pid_t           child_pid;
     int             server_fd;
@@ -65,7 +67,8 @@ char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *l
     return 1;
 }
 
-unsigned short rand_port() {
+unsigned short rand_port()
+{
     static char init = 0;
     int min;
     int max;

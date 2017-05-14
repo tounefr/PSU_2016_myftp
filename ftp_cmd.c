@@ -1,29 +1,5 @@
 
-#include <string.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include "myftp.h"
-
-t_command_func g_cs_cmd[CS_CMD_N] = {
-    {"USER", on_ftp_user_cmd},
-    {"PASS", on_ftp_pass_cmd},
-    {"CWD", on_ftp_cwd_cmd},
-    {"CDUP", on_ftp_cdup_cmd},
-    {"QUIT", on_ftp_quit_cmd},
-    {"DELE", on_ftp_dele_cmd},
-    {"PWD", on_ftp_pwd_cmd},
-    {"PASV", on_ftp_pasv_cmd},
-    {"PORT", on_ftp_port_cmd},
-    {"HELP", on_ftp_help_cmd},
-    {"NOO", on_ftp_noo_cmd},
-    {"RETR", on_ftp_retr_cmd},
-    {"STOR", on_ftp_stor_cmd},
-    {"LIST", on_ftp_list_cmd},
-    {"TYPE", on_type_list_cmd}
-};
 
 void on_type_list_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 200, "TYPE is now 8-bit binary");
@@ -81,17 +57,26 @@ void on_ftp_cwd_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *bu
     */
 
     char *dir;
+    char *abs_path;
 
     while (buffer && *buffer != '\0' && *buffer != ' ')
         buffer++;
     buffer++;
 
-    if (*buffer == '/')
-        ftp_client->cwd = strdup(buffer);
-    else
-        ftp_client->cwd = join_path(ftp_client->cwd, strdup(buffer));
+//    dir = normalize_path(strdup(buffer));
+    dir = strdup(buffer);
 
-    printf("CWD : %s\n", ftp_client->cwd);
+    //TODO: fuite de mémoire
+    if (*buffer == '/')
+        ftp_client->cwd = dir;
+    else
+        ftp_client->cwd = join_path(ftp_client->cwd, dir);
+
+    if (!(abs_path = join_path(ftp_client->home_path, ftp_client->cwd))) {
+        //TODO:
+        return;
+    }
+    printf("CWD : %s\n", abs_path);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250, "Directory successfully changed.");
 }
 
@@ -99,18 +84,44 @@ void on_ftp_cdup_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *b
     char *tmp;
 
     tmp = ftp_client->cwd;
-    ftp_client->cwd = parent_directory(ftp_client->cwd);
+    ftp_client->cwd = path_parent_directory(ftp_client->cwd);
     free(tmp);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250, "Directory successfully changed.");
 }
 
 void on_ftp_quit_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
-    if (ftp_client->conn_cmd.socket_fd != -1)
+    if (ftp_client->conn_cmd.socket_fd != -1) {
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 221, "Service closing control connection.");
         socket_close(&ftp_client->conn_cmd.socket_fd);
+    }
 }
 
-void on_ftp_dele_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
+void            on_ftp_dele_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
 
+    char        *path;
+    struct stat stat_buf;
+    char        *abs_path;
+
+    while (buffer && *buffer != '\0' && *buffer != ' ')
+        buffer++;
+    buffer++;
+
+    //TODO: fuite mémoire
+    path = strdup(buffer); //TODO:
+    if (*path != '/') {
+        path = join_path(ftp_client->cwd, path);
+    }
+    path = join_path(ftp_client->home_path, path);
+    if (-1 != stat(path, &stat_buf) && !S_ISDIR(stat_buf.st_mode)) {
+        printf("DELETE %s\n", path);
+        //TODO: activate
+        //unlink(path);
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250, "Requested file action okay, completed.");
+    }
+    else {
+        //TODO:
+    }
+    free(path);
 }
 
 void        on_ftp_pwd_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
@@ -159,19 +170,11 @@ void on_ftp_port_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *b
 }
 
 void on_ftp_help_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
-
+    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 214, "RTFM");
 }
 
 void on_ftp_noo_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
-
-}
-
-void on_ftp_retr_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
-
-}
-
-void on_ftp_stor_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
-
+    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 200, "Ok");
 }
 
 void        on_ftp_list_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {

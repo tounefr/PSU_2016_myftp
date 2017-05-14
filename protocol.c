@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include "myftp.h"
 
-char        ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client) {
+char        ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client)
+{
     char    *buffer;
     int     i;
 
@@ -23,15 +24,16 @@ char        ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client) 
         }
         if (i >= CS_CMD_N) {
             printf("Recv unsupported cmd : %s\n", buffer);
-            send_cmd_response(&ftp_client->conn_cmd.socket_fd, 500, "");
+            send_cmd_response(&ftp_client->conn_cmd.socket_fd, 502, NULL);
         }
         free(buffer);
-        usleep(5000);
+        usleep(500);
     }
     socket_close(&ftp_client->conn_cmd.socket_fd);
 }
 
-char                send_cmd_response(int *fd, int code, char *content) {
+char                send_cmd_response(int *fd, int code, char *content)
+{
     unsigned int    buffer_size;
     char            *buffer;
 
