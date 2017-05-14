@@ -16,6 +16,20 @@ char socket_init(int *fd)
     return 1;
 }
 
+/*
+char socket_connect(
+        int *fd,
+        char *ip, unsigned short port) {
+    struct sockaddr_in  sin;
+    socklen_t           sinsize;
+
+    if (-1 == (*fd = socket(AF_INET, SOCK_STREAM)))
+        EXIT_ERROR(0, strerror(errno))
+    sinsize = sizeof(struct sockaddr_in);
+    connect(*fd, (struct sockaddr*)&sin, &sinsize);
+}
+*/
+
 char                    socket_accept(int *server_socket, int *client_socket) {
     struct sockaddr_in  sin;
     socklen_t           sinsize;
@@ -58,8 +72,16 @@ char                    socket_infos(int *socket_fd, t_socket_infos *socket_info
     socksize = sizeof(sockaddr);
     if (-1 == getpeername(*socket_fd, (struct sockaddr*)&sockaddr, &socksize))
         return 0;
-    socket_infos->ipv4_ip = inet_ntoa(sockaddr.sin_addr);
-    socket_infos->port = sockaddr.sin_port;
+    socket_infos->client_ipv4 = strdup(inet_ntoa(sockaddr.sin_addr));
+    socket_infos->client_port = sockaddr.sin_port;
+    memset(&sockaddr, 0, sizeof(struct sockaddr_in));
+    if (-1 == getsockname(*socket_fd, (struct sockaddr*)&sockaddr, &socksize))
+        return 0;
+    socket_infos->server_ipv4 = strdup(inet_ntoa(sockaddr.sin_addr));
+    printf("server ipv4 : %s\n", socket_infos->server_ipv4);
+    if (!socket_infos->client_ipv4 || !socket_infos->server_ipv4)
+        EXIT_ERROR(0, "malloc error\n")
+    socket_infos->server_port = sockaddr.sin_port;
     return 1;
 }
 
@@ -76,4 +98,17 @@ char socket_close(int *fd) {
         return exit_error(0);
     *fd = -1;
     return 1;
+}
+
+char socket_port_used(unsigned short port) {
+    int fd;
+
+    if (!socket_init(&fd))
+        return 1;
+    if (!socket_listen(&fd, NET_SERVER_ADDRESS, &port)) {
+        socket_close(&fd);
+        return 1;
+    }
+    socket_close(&fd);
+    return 0;
 }
