@@ -128,7 +128,7 @@ char *path_parent_directory(char *path);
 char in_str(char c, char *tokens);
 char *normalize_path(char *path);
 void fatal_error(t_ftp_client *ftp_client);
-char  extract_ip_port(char *str);
+char        extract_ip_port(char *str, char **ip, unsigned short *port);
 char check_directory_exists(char *abs_path);
 char        check_file_exists(char *abs_path);
 char *get_path_from_buffer(char *buffer);

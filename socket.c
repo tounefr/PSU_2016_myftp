@@ -8,6 +8,17 @@ char socket_init(int *fd)
     return 1;
 }
 
+char                    socket_connect(int *fd,
+                                       char *ip,
+                                       unsigned short port)
+{
+    struct sockaddr_in  sockaddr;
+    socklen_t           socksize;
+
+//    sockaddr
+  //  connect(*fd, )
+}
+
 char                    socket_infos(int *socket_fd, t_socket_infos *socket_infos)
 {
     struct sockaddr_in  sockaddr;

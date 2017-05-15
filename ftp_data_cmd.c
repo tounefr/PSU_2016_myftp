@@ -60,7 +60,6 @@ void        on_ftp_retr_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, 
 void        on_ftp_stor_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer) {
     char    *abs_path;
 
-    printf("STOR !!\n");
     if (!(abs_path = get_path(buffer, ftp_client)))
         fatal_error(ftp_client);
     /*if (check_file_exists(abs_path) || check_directory_exists(abs_path)) {

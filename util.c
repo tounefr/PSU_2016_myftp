@@ -32,33 +32,62 @@ char        *format_pasv_ipv4_address(char *ipv4)
     return start;
 }
 
-char                extract_ip_port(char *str) {
-    char            *token;
-    char            *ipv4;
-    unsigned short  port;
-    unsigned int    i;
-    char            *ip_tmp;
+void replace_commas_to_points(char *str) {
+    int i;
 
-    printf("extract_ip_port\n");
-    if (!(ipv4 = calloc(1, 16)))
-        EXIT_ERROR(0, "malloc error\n")
-    i = 0;
-    ip_tmp = ipv4;
-    port = 0;
-    while ((token = strtok(str, ","))) {
-        str = NULL;
-        if (++i <= 3) {
-            strncpy(ip_tmp, token, 3);
-            ip_tmp += 3;
-            if (i < 3)
-                strcpy(ip_tmp++, ".");
-        }
-        else if (i == 4)
-            port += atoi(token) * 256;
-        else if (i == 5)
-            port += atoi(token);
+    i = -1;
+    while (str[++i]) {
+        if (str[i] == ',')
+            str[i] = '.';
     }
-    printf("%s %d\n", ipv4, port);
+}
+
+static unsigned short   extract_port(char *str, int *i) {
+    int                 p1;
+    int                 p2;
+    unsigned short      port;
+
+    p1 = atoi(&str[*i]);
+    while (str[*i] && str[*i] != '.')
+        (*i)++;
+    if (!str[*i])
+        return 0;
+    p2 = atoi(&str[++(*i)]);
+    port = p1 * 256 + p2;
+    return port;
+}
+
+static char *extract_ip(char *str, int *i) {
+    int     c;
+    char    *ip;
+
+    if (!(ip = calloc(1, 16)))
+        EXIT_ERROR(NULL, "malloc error\n")
+    c = 0;
+    while (str[*i]) {
+        if (str[*i] == '.')
+            c++;
+        if (c == 4) {
+            strncpy(ip, str, *i);
+            (*i)++;
+            return ip;
+        }
+        (*i)++;
+    }
+    free(ip);
+    return NULL;
+}
+
+
+char        extract_ip_port(char *str, char **ip, unsigned short *port) {
+    int     i;
+
+    i = -1;
+    //TODO: check returnv
+    replace_commas_to_points(str);
+    *ip = extract_ip(str, &i);
+    *port = extract_port(str, &i);
+    return 1;
 }
 
 char    in_str(char c, char *tokens)
