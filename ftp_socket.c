@@ -17,8 +17,8 @@ char        *ftp_recv_packet_command(int *fd)
     char    *buffer;
     int     i;
 
-    buffer = malloc(NET_BUFFER_SIZE);
-    memset(buffer, 0, NET_BUFFER_SIZE);
+    if (!(buffer = calloc(1, NET_BUFFER_SIZE)))
+        EXIT_ERROR(NULL, "malloc error\n")
     if (-1 == read(*fd, buffer, NET_BUFFER_SIZE - 1))
         EXIT_ERROR(NULL, "read error %s\n", strerror(errno))
     i = -1;
@@ -43,11 +43,6 @@ char socket_data_conn(t_ftp_client *ftp_client)
     return 1;
 }
 
-char send_data_file(t_ftp_client *ftp_client, char *abs_path)
-{
-
-}
-
 char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port)
 {
     char            *pasv_buffer;
@@ -63,6 +58,7 @@ char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *l
         EXIT_ERROR(0, "%s\n", strerror(errno))
     if (!socket_accept(&server_fd, &ftp_client->conn_data.socket_fd))
         EXIT_ERROR(0, "%s\n", strerror(errno))
+    printf("New data conn\n");
     socket_close(&server_fd);
     return 1;
 }

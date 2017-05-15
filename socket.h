@@ -25,7 +25,6 @@
 # define FTP_ANONYMOUS_LOGIN "Anonymous"
 
 # define PATH_CHARS_TO_NORMALIZE " \""
-#include <sys/types.h>
 
 typedef struct s_socket_infos
 {
@@ -129,6 +128,10 @@ char *path_parent_directory(char *path);
 char in_str(char c, char *tokens);
 char *normalize_path(char *path);
 void fatal_error(t_ftp_client *ftp_client);
+char  extract_ip_port(char *str);
+char check_directory_exists(char *abs_path);
+char        check_file_exists(char *abs_path);
+char *get_path_from_buffer(char *buffer);
 
 // ftp.c
 void free_ftp_client(t_ftp_client *ftp_client);
@@ -153,5 +156,6 @@ void init_ftp_server(t_ftp_server *ftp_server, char **av);
 char is_absolute_path(char *path);
 
 char *get_path(char *file, t_ftp_client *ftp_client);
+
 
 #endif //PROJETS_SOCKET_H
