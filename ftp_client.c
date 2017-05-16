@@ -37,11 +37,11 @@ t_ftp_client        *init_ftp_client(
     ftp_client->is_logged = 0;
     ftp_client->cwd = NULL;
     ftp_client->next = NULL;
-    ftp_client->user = strdup("anonymous");
+    ftp_client->user = NULL;
     ftp_client->home_path = strdup(ftp_server->anon_directory_path);
     ftp_client->cwd = strdup("/");
     ftp_client->conn_data.socket_fd = -1;
-    if (!ftp_client->user || !ftp_client->home_path || !ftp_client->cwd)
+    if (!ftp_client->home_path || !ftp_client->cwd)
         EXIT_ERROR(NULL, "malloc error\n");
     ftp_client->pass = NULL;
     if (!socket_infos(&ftp_client->conn_cmd.socket_fd,

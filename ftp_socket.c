@@ -24,7 +24,12 @@ char        *ftp_recv_packet_command(int *fd)
     i = -1;
     while (++i < strlen(buffer)) {
         if (buffer[i] == '\r' && buffer[i + 1] == '\n') {
+            for (int i2 = 0; i2 < strlen(buffer); i2++) {
+                printf("%d ", buffer[i2]);
+            }
             buffer[i] = '\0';
+            printf("\n");
+
             return buffer;
         }
     }

@@ -9,10 +9,18 @@ void on_type_list_cmd(t_ftp_server *ftp_server,
                       "TYPE is now 8-bit binary");
 }
 
-void on_ftp_user_cmd(t_ftp_server *ftp_server,
+void        on_ftp_user_cmd(t_ftp_server *ftp_server,
                      t_ftp_client *ftp_client,
                      char *buffer)
 {
+    char    *user;
+
+    if (!(user = extract_buffer_value(buffer)))
+        fatal_error(ftp_client);
+    if (ftp_client->user)
+        free(ftp_client->user);
+    printf("Login : %s\n", user);
+    ftp_client->user = user;
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 331,
                       "Please specify the password.");
 }
@@ -21,8 +29,18 @@ void on_ftp_pass_cmd(t_ftp_server *ftp_server,
                      t_ftp_client *ftp_client,
                      char *buffer)
 {
-    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 230,
-                      "Login successful.");
+    if (ftp_client->user == NULL) {
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 332,
+                          "Need login first.");
+        return;
+    }
+    if (!strcasecmp(ftp_client->user, "anonymous")) {
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 230,
+                          "Login successful.");
+        return;
+    }
+    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 530,
+                      "Wrong credentials.");
 }
 
 void        on_ftp_cwd_cmd(t_ftp_server *ftp_server,

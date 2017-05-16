@@ -18,10 +18,8 @@ char                ftp_server_accept_loop(t_ftp_server *ftp_server)
                                     client_fd);
         if ((client_pid = fork()) == 0) {
             ftp_client_loop(ftp_server, ftp_client);
-        } else if (client_pid == -1) {
-            printf("Failed to fork !\n");
-            usleep(5000); // To prevent flood
-        }
+        } else if (client_pid == -1)
+            EXIT_ERROR(0, "fork error : %s\n", strerror(errno))
         else {
             ftp_client->pid = client_pid;
             printf("New Client %s:%d\n",

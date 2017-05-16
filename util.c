@@ -78,6 +78,12 @@ static char *extract_ip(char *str, int *i) {
     return NULL;
 }
 
+char *extract_buffer_value(char *buffer) {
+    while (buffer && *buffer != '\0' && *buffer != ' ')
+        buffer++;
+    buffer++;
+    return strdup(buffer);
+}
 
 char        extract_ip_port(char *str, char **ip, unsigned short *port) {
     int     i;

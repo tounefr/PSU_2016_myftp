@@ -135,6 +135,7 @@ char        extract_ip_port(char *str, char **ip, unsigned short *port);
 char check_directory_exists(char *abs_path);
 char        check_file_exists(char *abs_path);
 char *get_path_from_buffer(char *buffer);
+char *extract_buffer_value(char *buffer);
 
 // ftp.c
 void free_ftp_client(t_ftp_client *ftp_client);
