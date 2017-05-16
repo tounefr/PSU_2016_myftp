@@ -10,13 +10,18 @@ char socket_init(int *fd)
 
 char                    socket_connect(int *fd,
                                        char *ip,
-                                       unsigned short port)
+                                       unsigned short *port)
 {
     struct sockaddr_in  sockaddr;
     socklen_t           socksize;
 
-//    sockaddr
-  //  connect(*fd, )
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(*port);
+    inet_pton(AF_INET, ip, &(sockaddr.sin_addr));
+    socksize = sizeof(sockaddr);
+    if (-1 == connect(*fd, (struct sockaddr *)&sockaddr, socksize))
+        EXIT_ERROR(0, "connect error : %s\n", strerror(errno))
+    return 1;
 }
 
 char                    socket_infos(int *socket_fd, t_socket_infos *socket_infos)

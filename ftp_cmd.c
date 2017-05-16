@@ -148,6 +148,22 @@ void                on_ftp_pasv_cmd(t_ftp_server *ftp_server,
     }
 }
 
+char ftp_connect(t_ftp_client *ftp_client,
+                 char *ip,
+                 unsigned short *port)
+{
+    int fd;
+
+    if (!socket_init(&fd))
+        return 0;
+    if (!socket_connect(&fd, ip, port))
+        return 0;
+    ftp_client->conn_data.socket_fd = fd;
+    if (!socket_infos(&fd, &ftp_client->conn_data.socket_infos))
+        return 0;
+    return 1;
+}
+
 void                on_ftp_port_cmd(t_ftp_server *ftp_server,
                      t_ftp_client *ftp_client,
                      char *buffer)
@@ -160,7 +176,13 @@ void                on_ftp_port_cmd(t_ftp_server *ftp_server,
     buffer++;
     if (!extract_ip_port(buffer, &ip, &port))
         fatal_error(ftp_client);
-
+    if (!ftp_connect(ftp_client, ip, &port)) {
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 421,
+                          "Service not available.");
+        return;
+    }
+    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 200,
+                      "PORT command successful.");
 }
 
 void on_ftp_help_cmd(t_ftp_server *ftp_server,

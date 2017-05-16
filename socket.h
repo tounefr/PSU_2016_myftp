@@ -87,6 +87,9 @@ char socket_close(int *fd);
 char socket_infos(int *socket_fd, t_socket_infos *socket_infos);
 char socket_send(int *fd, char *buffer);
 char socket_port_used(unsigned short port);
+char                    socket_connect(int *fd,
+                                       char *ip,
+                                       unsigned short *port);
 
 // protocol.c
 char ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client);
@@ -156,6 +159,10 @@ void init_ftp_server(t_ftp_server *ftp_server, char **av);
 char is_absolute_path(char *path);
 
 char *get_path(char *file, t_ftp_client *ftp_client);
+
+char ftp_connect(t_ftp_client *ftp_client,
+                 char *ip,
+                 unsigned short *port);
 
 
 #endif //PROJETS_SOCKET_H
