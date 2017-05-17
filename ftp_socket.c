@@ -101,7 +101,7 @@ char            *ftp_recv_packet_command(int *fd) {
     return packet;
 }
 
-char socket_data_conn(t_ftp_client *ftp_client)
+char    socket_data_conn(t_ftp_client *ftp_client)
 {
     int fd;
 

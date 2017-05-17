@@ -8,9 +8,7 @@ char socket_init(int *fd)
     return 1;
 }
 
-char                    socket_connect(int *fd,
-                                       char *ip,
-                                       unsigned short *port)
+char                    socket_connect(int *fd, char *ip, unsigned short *port)
 {
     struct sockaddr_in  sockaddr;
     socklen_t           socksize;
@@ -52,10 +50,8 @@ char socket_send(int *fd, char *buffer)
 
 char socket_close(int *fd)
 {
-    if (-1 == shutdown(*fd, SHUT_RDWR))
-        EXIT_ERROR(0, "shutdown error : %s\n", strerror(errno))
-    if (-1 == close(*fd))
-        EXIT_ERROR(0, "close error : %s\n", strerror(errno))
+    shutdown(*fd, SHUT_RDWR);
+    close(*fd);
     *fd = -1;
     return 1;
 }

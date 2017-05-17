@@ -160,7 +160,7 @@ void                on_ftp_pasv_cmd(t_ftp_server *ftp_server,
     }
 }
 
-char ftp_connect(t_ftp_client *ftp_client,
+char    ftp_connect(t_ftp_client *ftp_client,
                  char *ip,
                  unsigned short *port)
 {

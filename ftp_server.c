@@ -18,6 +18,7 @@ char                ftp_server_accept_loop(t_ftp_server *ftp_server)
                                     client_fd);
         if ((client_pid = fork()) == 0) {
             ftp_client_loop(ftp_server, ftp_client);
+            exit(0);
         } else if (client_pid == -1)
             EXIT_ERROR(0, "fork error : %s\n", strerror(errno))
         else {

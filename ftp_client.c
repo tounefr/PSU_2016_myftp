@@ -30,8 +30,7 @@ t_ftp_client        *init_ftp_client(
     t_ftp_client    *ftp_client;
 
     ftp_client = NULL;
-    if (NULL == (ftp_client = malloc(sizeof(t_ftp_client))))
-        EXIT_ERROR(NULL, "malloc error\n")
+    ftp_client = my_malloc(sizeof(t_ftp_client));
     ftp_client->pid = pid;
     ftp_client->conn_cmd.socket_fd = client_socket_fd;
     ftp_client->is_logged = 0;
