@@ -35,6 +35,7 @@ void on_ftp_pass_cmd(t_ftp_server *ftp_server,
         return;
     }
     if (!strcasecmp(ftp_client->user, "anonymous")) {
+        ftp_client->is_logged = 1;
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 230,
                           "Login successful.");
         return;
@@ -63,12 +64,10 @@ void        on_ftp_cwd_cmd(t_ftp_server *ftp_server,
     if (!check_directory_exists(abs_path)) {
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 550,
                           "File not found.");
-        printf("file_not_found: %s\n", abs_path);
         return;
     }
     if (!(ftp_client->cwd = strdup(file_path)))
         fatal_error(ftp_client);
-    printf("CWD : %s\n", abs_path);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250,
                       "Directory successfully changed.");
 }
@@ -140,12 +139,7 @@ void                on_ftp_pasv_cmd(t_ftp_server *ftp_server,
     char            *pasv_buffer;
     unsigned short  listen_port;
 
-    if (ftp_client->is_logged) {
-        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 500, NULL);
-        return;
-    }
-    if (!(pasv_buffer = calloc(1, 1000)))
-        return;
+    pasv_buffer = my_malloc(1000);
     listen_port = rand_port();
 //    listen_address = format_pasv_ipv4_address(ftp_client->conn_cmd.socket_infos.server_ipv4);
     listen_address = "127,0,0,1"; //TODO:

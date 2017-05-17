@@ -6,8 +6,7 @@ char        *join_path(char *s1, char *s2)
     char    *s3;
     int     s1_len;
 
-    if (!(s3 = calloc(1, strlen(s1) + strlen(s2) + 2)))
-        EXIT_ERROR(NULL, "malloc error\n");
+    s3 = my_malloc(strlen(s1) + strlen(s2) + 2);
     if (s1[strlen(s1)-1] == '/' && *s2 == '/')
         s1[strlen(s1)-1] = '\0';
     if (s1[strlen(s1)-1] != '/' && *s2 != '/') {
@@ -48,8 +47,7 @@ char                *normalize_path(char *path)
     unsigned int    i2;
 
     count_chars_to_normalize = path_count_chars_to_normalize(path);
-    if (!(path_normalized = calloc(1, strlen(path) + count_chars_to_normalize + 1)))
-        EXIT_ERROR(NULL, "malloc error\n")
+    path_normalized = my_malloc(strlen(path) + count_chars_to_normalize + 1);
     i = 0;
     i2 = 0;
     while (i2 < strlen(path)) {

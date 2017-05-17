@@ -10,6 +10,16 @@ char exit_error(int returnv)
     return returnv;
 }
 
+void        *my_malloc(size_t size) {
+    void    *ptr;
+
+    if (!(ptr = calloc(1, size))) {
+        fprintf(stderr, "malloc error\n");
+        exit(1);
+    }
+    return ptr;
+}
+
 char        *format_pasv_ipv4_address(char *ipv4)
 {
     char    *ipv4_formated;
@@ -17,8 +27,7 @@ char        *format_pasv_ipv4_address(char *ipv4)
     char    *token;
     int     i;
 
-    if (!(ipv4_formated = calloc(1, 16)))
-        EXIT_ERROR(NULL, "malloc error\n")
+    ipv4_formated = my_malloc(16);
     start = ipv4_formated;
     i = 0;
     while ((token = strtok(ipv4, "."))) {
@@ -61,8 +70,7 @@ static char *extract_ip(char *str, int *i) {
     int     c;
     char    *ip;
 
-    if (!(ip = calloc(1, 16)))
-        EXIT_ERROR(NULL, "malloc error\n")
+    ip = my_malloc(16);
     c = 0;
     while (str[*i]) {
         if (str[*i] == '.')

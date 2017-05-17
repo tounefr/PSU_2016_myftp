@@ -58,6 +58,7 @@ t_ftp_client        *new_ftp_client(
 {
     t_ftp_client    *cur_client;
     t_ftp_client    *ftp_client;
+    t_ftp_client    *prev_client;
 
     if (!(ftp_client = init_ftp_client(ftp_server, pid, client_socket_fd)))
         return NULL;
@@ -65,9 +66,11 @@ t_ftp_client        *new_ftp_client(
         *clients = ftp_client;
     else {
         cur_client = *clients;
-        while (cur_client->next)
+        while (cur_client) {
+            prev_client = cur_client;
             cur_client = cur_client->next;
-        cur_client->next = ftp_client;
+        }
+        prev_client->next = ftp_client;
     }
     return ftp_client;
 }

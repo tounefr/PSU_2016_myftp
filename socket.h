@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <assert.h>
 
 # define NET_SERVER_ADDRESS "0.0.0.0"
 # define NET_BUFFER_SIZE 4096
@@ -66,10 +67,13 @@ typedef struct s_ftp_server
     t_ftp_client *clients;
 } t_ftp_server;
 
+# define PRECHECK_LOGGED 1
+
 typedef struct s_command_func
 {
     char *cmd;
     void (*callback)(t_ftp_server*, t_ftp_client*, char*);
+    int flags_prechecks;
 } t_command_func;
 
 extern t_ftp_server ftp_server;
@@ -136,6 +140,7 @@ char check_directory_exists(char *abs_path);
 char        check_file_exists(char *abs_path);
 char *get_path_from_buffer(char *buffer);
 char *extract_buffer_value(char *buffer);
+void        *my_malloc(size_t size);
 
 // ftp.c
 void free_ftp_client(t_ftp_client *ftp_client);

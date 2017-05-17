@@ -10,16 +10,18 @@ char            ftp_send_file(char *file, int *socket_fd)
     int         file_fd;
 
     if (-1 == (file_fd = open(file, O_RDONLY)))
-        EXIT_ERROR(0, "open error : %s\n", strerror(errno))
+        EXIT_ERROR(0, "open error %s : %s\n", file, strerror(errno))
     while ((readv = read(file_fd, file_buffer, sizeof(file_buffer))) > 0) {
         if (-1 == write(*socket_fd, file_buffer, readv)) {
-            close(file_fd);
+            if (-1 == close(file_fd))
+                EXIT_ERROR(0, "close error : %s\n", strerror(errno))
             EXIT_ERROR(0, "write error : %s\n", strerror(errno))
         }
     }
     if (readv == -1)
         EXIT_ERROR(0, "read error : %s\n", strerror(errno))
-    close(file_fd);
+    if (-1 == close(file_fd))
+        EXIT_ERROR(0, "close error : %s\n", strerror(errno))
     return 1;
 }
 
@@ -36,11 +38,11 @@ char            ftp_recv_file(char *file, int *socket_fd)
     while ((readv = read(*socket_fd, file_buffer, sizeof(file_buffer))) > 0) {
         if (-1 == write(file_fd, file_buffer, readv))
             EXIT_ERROR(0, "write error : %s\n", strerror(errno))
-        printf("readv : %d\n", readv);
     }
     if (readv == -1)
         EXIT_ERROR(0, "read error : %s\n", strerror(errno))
-    close(file_fd);
+    if (-1 == close(file_fd))
+        EXIT_ERROR(0, "close error : %s\n", strerror(errno));
     return 1;
 }
 
