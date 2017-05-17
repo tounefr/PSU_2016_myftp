@@ -6,18 +6,24 @@ char        *join_path(char *s1, char *s2)
     char    *s3;
     int     s1_len;
 
+    s1 = strdup(s1);
+    s2 = strdup(s2);
+    if (!s1 || !s2)
+        malloc_error();
     s3 = my_malloc(strlen(s1) + strlen(s2) + 2);
     if (s1[strlen(s1)-1] == '/' && *s2 == '/')
         s1[strlen(s1)-1] = '\0';
     if (s1[strlen(s1)-1] != '/' && *s2 != '/') {
         s1_len = strlen(s1);
-        if (!realloc(s1, s1_len + 2))
-            EXIT_ERROR(NULL, "malloc error\n")
+        if (!(s1 = realloc(s1, s1_len + 2)))
+            malloc_error();
         s1[s1_len] = '/';
         s1[s1_len + 1] = '\0';
     }
     strcpy(s3, s1);
     strcpy(&s3[strlen(s1)], s2);
+    free(s1);
+    free(s2);
     return s3;
 }
 

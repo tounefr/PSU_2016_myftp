@@ -57,8 +57,7 @@ char                send_cmd_response(int *fd, int code, char *content)
         content = "";
     printf("Send %d : %s\n", code, content);
     buffer_size = 3 + 3 + strlen(content) + 1;
-    if (NULL == (buffer = malloc(buffer_size)))
-        return 0;
+    buffer = my_malloc(buffer_size);
     snprintf(buffer, buffer_size, "%d %s\r\n", code, content);
     socket_send(fd, buffer);
     free(buffer);

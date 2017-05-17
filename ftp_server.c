@@ -16,9 +16,14 @@ char                ftp_server_accept_loop(t_ftp_server *ftp_server)
                                     &ftp_server->clients,
                                     client_pid,
                                     client_fd);
+        printf("client : %s:%d server : %s:%d\n",
+               ftp_client->conn_cmd.socket_infos.client_ipv4,
+               ftp_client->conn_cmd.socket_infos.client_port,
+               ftp_client->conn_cmd.socket_infos.server_ipv4,
+               ftp_client->conn_cmd.socket_infos.server_port
+        );
         if ((client_pid = fork()) == 0) {
-            ftp_client_loop(ftp_server, ftp_client);
-            exit(0);
+            exit(!ftp_client_loop(ftp_server, ftp_client));
         } else if (client_pid == -1)
             EXIT_ERROR(0, "fork error : %s\n", strerror(errno))
         else {

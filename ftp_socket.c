@@ -12,33 +12,6 @@ static char *allocate_new_command_packet(char *buffer,
     return memcpy(packet, buffer, limit);
 }
 
-/*
-char        *ftp_recv_packet_command(int *fd)
-{
-    char    *buffer;
-    int     i;
-
-    if (!(buffer = calloc(1, NET_BUFFER_SIZE)))
-        EXIT_ERROR(NULL, "malloc error\n")
-    if (-1 == read(*fd, buffer, NET_BUFFER_SIZE - 1))
-        EXIT_ERROR(NULL, "read error %s\n", strerror(errno))
-    i = -1;
-
-    for (int i2 = 0; i2 < NET_BUFFER_SIZE; i2++) {
-        printf("%d ", buffer[i2]);
-    }
-    printf("\n");
-
-    while (++i < strlen(buffer)) {
-        if (buffer[i] == '\r' && buffer[i + 1] == '\n') {
-            buffer[i] = '\0';
-            return buffer;
-        }
-    }
-    return NULL;
-}
- */
-
 int     index_delimiter_in_buffer(char *buffer) {
     int i;
 
@@ -52,8 +25,10 @@ int     index_delimiter_in_buffer(char *buffer) {
 
 char extend_buffer(char *buffer, int *buffer_size) {
     *buffer_size += NET_BUFFER_SIZE;
-    if (!realloc(buffer, *buffer_size))
-        return 0;
+    if (!(buffer = realloc(buffer, *buffer_size))) {
+        fprintf(stderr, "malloc error\n");
+        exit(1);
+    }
     memset(&buffer[*buffer_size - NET_BUFFER_SIZE], 0, NET_BUFFER_SIZE);
     return 1;
 }
@@ -87,8 +62,7 @@ char            *ftp_recv_packet_command(int *fd) {
     if (strlen(buffer) == 0)
         return NULL;
     if ((index_delimiter = index_delimiter_in_buffer(buffer)) == -1) {
-        if (!extend_buffer(buffer, &buffer_size))
-            EXIT_ERROR(0, "malloc error\n")
+        extend_buffer(buffer, &buffer_size);
         return ftp_recv_packet_command(fd);
     }
     if (!(packet = extract_packet_and_save(&buffer, &index_delimiter)))
@@ -113,11 +87,11 @@ char    socket_data_conn(t_ftp_client *ftp_client)
     return 1;
 }
 
-char                listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port)
+char        listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port)
 {
-    char            *pasv_buffer;
-    pid_t           child_pid;
-    int             server_fd;
+    char    *pasv_buffer;
+    pid_t   child_pid;
+    int     server_fd;
 
     if (ftp_client->conn_data.socket_fd != -1)
         socket_close(&ftp_client->conn_data.socket_fd);

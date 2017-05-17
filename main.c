@@ -31,6 +31,8 @@ int                 main(int ac, char **av)
 
     if (ac != 3)
         return usage();
+    if (!is_number(av[1]))
+        return usage();
     if (!check_directory_exists(av[2]))
         EXIT_ERROR(1, "Anonymous home path error : %s\n", strerror(errno))
     init_ftp_server(&ftp_server, av);

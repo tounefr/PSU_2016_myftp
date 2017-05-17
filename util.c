@@ -10,6 +10,22 @@ char exit_error(int returnv)
     return returnv;
 }
 
+void malloc_error() {
+    fprintf(stderr, "malloc error\n");
+    exit(1);
+}
+
+char is_number(char *str) {
+    if (strlen(str) == 0)
+        return 0;
+    while (*str) {
+        if (*str < '0' || *str > '9')
+            return 0;
+        str++;
+    }
+    return 1;
+}
+
 void        *my_malloc(size_t size) {
     void    *ptr;
 
@@ -27,17 +43,21 @@ char        *format_pasv_ipv4_address(char *ipv4)
     char    *token;
     int     i;
 
+    if (!(ipv4 = strdup(ipv4))) {
+        fprintf(stderr, "malloc error\n");
+        exit(1);
+    }
     ipv4_formated = my_malloc(16);
     start = ipv4_formated;
     i = 0;
     while ((token = strtok(ipv4, "."))) {
-        if (ipv4)
-            ipv4 = NULL;
+        ipv4 = NULL;
         strncpy(ipv4_formated, token, 3);
         ipv4_formated += ((strlen(token) > 3) ? 3 : strlen(token));
         if (i++ < 3)
             strncpy(ipv4_formated++, ",", 1);
     }
+    free(ipv4);
     return start;
 }
 

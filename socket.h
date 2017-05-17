@@ -141,6 +141,8 @@ char        check_file_exists(char *abs_path);
 char *get_path_from_buffer(char *buffer);
 char *extract_buffer_value(char *buffer);
 void        *my_malloc(size_t size);
+char is_number(char *str);
+void malloc_error();
 
 // ftp.c
 void free_ftp_client(t_ftp_client *ftp_client);

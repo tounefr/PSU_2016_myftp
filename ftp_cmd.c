@@ -141,12 +141,7 @@ void                on_ftp_pasv_cmd(t_ftp_server *ftp_server,
 
     pasv_buffer = my_malloc(1000);
     listen_port = rand_port();
-//    listen_address = format_pasv_ipv4_address(ftp_client->conn_cmd.socket_infos.server_ipv4);
-    listen_address = "127,0,0,1"; //TODO:
-    if (!listen_address) {
-        free(pasv_buffer);
-        return;
-    }
+    listen_address = format_pasv_ipv4_address(ftp_client->conn_cmd.socket_infos.server_ipv4);
     snprintf(pasv_buffer, 999, "Entering Passive Mode (%s,%d,%d)",
              listen_address,
              (listen_port / 256),

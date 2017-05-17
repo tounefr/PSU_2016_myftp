@@ -80,15 +80,31 @@ void                release_ftp_clients(t_ftp_client **clients)
     t_ftp_client    *next;
     t_ftp_client    *prev;
     int             status;
-    int             pid;
+    int             returnv;
+
+    return;
 
     prev = NULL;
     client = *clients;
     while (client) {
         next = client->next;
-        if (-1 == (pid = waitpid(client->pid, &status, WNOHANG))
-            || pid > 0
-            || !WIFEXITED(status)) {
+        if (waitpid(client->pid, &status, WNOHANG) > 0) {
+            release_ftp_client(client);
+            if (prev)
+                prev->next = next;
+            else if (!next)
+                *clients = NULL;
+        }
+        prev = client;
+        client = next;
+    }
+
+    /*
+    while (client) {
+        i++;
+        next = client->next;
+        if ((returnv = waitpid(client->pid, &status, WNOHANG)) > 0) {
+            printf("waitpid : %d\n", returnv);
             release_ftp_client(client);
             if (prev)
                 prev->next = next;
@@ -97,7 +113,10 @@ void                release_ftp_clients(t_ftp_client **clients)
         }
         else
             printf("client pid=%d connected\n", client->pid);
+
         prev = client;
         client = next;
     }
+    printf("count : %d\n", i);
+     */
 }
