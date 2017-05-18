@@ -35,9 +35,12 @@ void            on_ftp_dele_cmd(t_ftp_server *ftp_server,
         //TODO: send file not exists
         return;
     }
-    printf("DELETE %s\n", path);
-    //TODO: activate
-    //unlink(path);
+    printf("delete %s\n", path);
+    if (-1 == unlink(path)) {
+        printf("failed to delete file : %s\n", strerror(errno));
+        //TODO: error
+        return;
+    }
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250,
                       "Requested file action okay, completed.");
 }
