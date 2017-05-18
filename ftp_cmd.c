@@ -68,15 +68,22 @@ void        on_ftp_cwd_cmd(t_ftp_server *ftp_server,
         if (!(file_path = join_path(ftp_client->cwd, file_path)))
             fatal_error(ftp_client);
     }
+    free(buffer_path);
     if (!(abs_path = join_path(ftp_client->home_path, file_path)))
         fatal_error(ftp_client);
     if (!check_directory_exists(abs_path)) {
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 550,
                           "File not found.");
+        free(abs_path);
+        free(file_path);
         return;
     }
+    if (ftp_client->cwd)
+        free(ftp_client->cwd);
     if (!(ftp_client->cwd = strdup(file_path)))
         fatal_error(ftp_client);
+    free(file_path);
+    free(abs_path);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 250,
                       "Directory successfully changed.");
 }

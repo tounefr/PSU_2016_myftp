@@ -22,14 +22,27 @@ char    socket_data_conn(t_ftp_client *ftp_client)
     return 1;
 }
 
+static void free_ftp_client_conn(t_ftp_client_conn *ftp_conn) {
+    if (ftp_conn->socket_infos.client_ipv4) {
+        free(ftp_conn->socket_infos.client_ipv4);
+        ftp_conn->socket_infos.client_ipv4 = NULL;
+    }
+    if (ftp_conn->socket_infos.server_ipv4) {
+        free(ftp_conn->socket_infos.server_ipv4);
+        ftp_conn->socket_infos.server_ipv4 = NULL;
+    }
+}
+
 char        listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port)
 {
     char    *pasv_buffer;
     pid_t   child_pid;
     int     server_fd;
 
-    if (ftp_client->conn_data.socket_fd != -1)
+    if (ftp_client->conn_data.socket_fd != -1) {
+        free_ftp_client_conn(&ftp_client->conn_data);
         socket_close(&ftp_client->conn_data.socket_fd);
+    }
     *listen_port = rand_port();
     if (!socket_init(&server_fd))
         EXIT_ERROR(0, "%s\n", strerror(errno))

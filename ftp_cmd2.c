@@ -96,8 +96,10 @@ void                on_ftp_port_cmd(t_ftp_server *ftp_server,
     if (!ftp_connect(ftp_client, ip, &port)) {
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 421,
                           "Service not available.");
+        free(ip);
         return;
     }
+    free(ip);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 200,
                       "PORT command successful.");
 }

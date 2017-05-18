@@ -12,7 +12,6 @@
 
 static void sig_handler(int signum)
 {
-//    printf("\nCatched signum %d\n", signum);
     if (g_ftp_server) {
         if (getpid() == g_ftp_server->server_pid) {
             t_ftp_client *client;

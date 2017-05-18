@@ -35,12 +35,17 @@ char *get_path_from_buffer(char *buffer) {
 
 char        *get_path(char *buffer, t_ftp_client *ftp_client) {
     char    *path;
+    char    *tmp;
 
     if (!(path = get_path_from_buffer(buffer)))
         return NULL;
+    tmp = path;
     if (!(path = join_path(ftp_client->cwd, path)))
         return NULL;
+    free(tmp);
+    tmp = path;
     if (!(path = join_path(ftp_client->home_path, path)))
         return NULL;
+    free(tmp);
     return path;
 }

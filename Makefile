@@ -38,9 +38,9 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = server
 
-LDFLAGS+=
+LDFLAGS+= -g
 
-CFLAGS+=
+CFLAGS+= -g
 
 all: $(NAME)
 

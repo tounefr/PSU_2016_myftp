@@ -64,6 +64,7 @@ void        on_ftp_retr_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, 
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 150, NULL);
     if (!ftp_send_file(abs_path, &ftp_client->conn_data.socket_fd))
         fatal_error(ftp_client);
+    free(abs_path);
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 226, "Transfer complete.");
     socket_close(&ftp_client->conn_data.socket_fd);
 }

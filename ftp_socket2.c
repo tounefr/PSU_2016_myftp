@@ -17,7 +17,7 @@ static char *allocate_new_command_packet(char *buffer,
     char    *packet;
 
     if (NULL == (packet = malloc(limit + 1)))
-    EXIT_ERROR(NULL, "malloc error\n")
+        malloc_error();
     return memcpy(packet, buffer, limit);
 }
 
@@ -34,10 +34,8 @@ static int     index_delimiter_in_buffer(char *buffer) {
 
 static char extend_buffer(char *buffer, int *buffer_size) {
     *buffer_size += NET_BUFFER_SIZE;
-    if (!(buffer = realloc(buffer, *buffer_size))) {
-        fprintf(stderr, "malloc error\n");
-        exit(1);
-    }
+    if (!(buffer = realloc(buffer, *buffer_size)))
+        malloc_error();
     memset(&buffer[*buffer_size - NET_BUFFER_SIZE], 0, NET_BUFFER_SIZE);
     return 1;
 }
@@ -74,8 +72,7 @@ char            *ftp_recv_packet_command(int *fd) {
         extend_buffer(buffer, &buffer_size);
         return ftp_recv_packet_command(fd);
     }
-    if (!(packet = extract_packet_and_save(&buffer, &index_delimiter)))
-    EXIT_ERROR(0, "malloc error\n")
+    packet = extract_packet_and_save(&buffer, &index_delimiter);
     if (strlen(buffer) == 0) {
         free(buffer);
         buffer_size = NET_BUFFER_SIZE;

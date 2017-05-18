@@ -29,3 +29,4 @@ t_command_func g_cs_cmd[CS_CMD_N] = {
 };
 
 t_ftp_server *g_ftp_server = NULL;
+t_ftp_client *g_cur_client = NULL;
