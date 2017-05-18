@@ -1,11 +1,11 @@
 ##
 ## Makefile for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
 ## 
-## Made by toune
+## Made by Thomas HENON
 ## Login   <thomas.henon@epitech.eu>
 ## 
-## Started on  Thu May 18 10:07:56 2017 toune
-## Last update Thu May 18 10:07:58 2017 toune
+## Started on  Thu May 18 10:29:51 2017 Thomas HENON
+## Last update Thu May 18 10:29:53 2017 Thomas HENON
 ##
 
 CC = gcc

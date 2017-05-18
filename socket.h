@@ -1,3 +1,12 @@
+/*
+** socket.h for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by Thomas HENON
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:33:13 2017 Thomas HENON
+** Last update Thu May 18 10:33:13 2017 Thomas HENON
+*/
 
 #ifndef PROJETS_SOCKET_H
 #define PROJETS_SOCKET_H

@@ -1,11 +1,11 @@
 /*
 ** extract_ip_port.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
 ** 
-** Made by toune
+** Made by Thomas HENON
 ** Login   <thomas.henon@epitech.eu>
 ** 
-** Started on  Thu May 18 10:05:52 2017 toune
-** Last update Thu May 18 10:05:52 2017 toune
+** Started on  Thu May 18 10:31:13 2017 Thomas HENON
+** Last update Thu May 18 10:31:14 2017 Thomas HENON
 */
 
 #include "myftp.h"

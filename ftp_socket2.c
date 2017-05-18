@@ -1,11 +1,11 @@
 /*
 ** ftp_socket2.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
 ** 
-** Made by toune
+** Made by Thomas HENON
 ** Login   <thomas.henon@epitech.eu>
 ** 
-** Started on  Thu May 18 10:07:47 2017 toune
-** Last update Thu May 18 10:07:47 2017 toune
+** Started on  Thu May 18 10:29:27 2017 Thomas HENON
+** Last update Thu May 18 10:29:28 2017 Thomas HENON
 */
 
 #include "myftp.h"

@@ -1,11 +1,11 @@
 /*
 ** main.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
 ** 
-** Made by toune
+** Made by Thomas HENON
 ** Login   <thomas.henon@epitech.eu>
 ** 
-** Started on  Thu May 18 10:06:31 2017 toune
-** Last update Thu May 18 10:06:32 2017 toune
+** Started on  Thu May 18 10:32:38 2017 Thomas HENON
+** Last update Thu May 18 10:32:38 2017 Thomas HENON
 */
 
 #include "myftp.h"
