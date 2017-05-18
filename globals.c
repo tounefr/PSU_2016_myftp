@@ -1,3 +1,12 @@
+/*
+** globals.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:07:52 2017 toune
+** Last update Thu May 18 10:07:52 2017 toune
+*/
 
 #include "myftp.h"
 
@@ -19,5 +28,4 @@ t_command_func g_cs_cmd[CS_CMD_N] = {
     {"TYPE",    on_type_list_cmd,   PRECHECK_LOGGED}
 };
 
-t_ftp_client *cur_client = NULL;
 t_ftp_server *g_ftp_server = NULL;

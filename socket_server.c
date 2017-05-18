@@ -1,3 +1,12 @@
+/*
+** socket_server.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:06:57 2017 toune
+** Last update Thu May 18 10:06:58 2017 toune
+*/
 
 #include "myftp.h"
 

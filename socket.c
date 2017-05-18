@@ -1,3 +1,12 @@
+/*
+** socket.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:06:53 2017 toune
+** Last update Thu May 18 10:06:53 2017 toune
+*/
 
 #include "myftp.h"
 
@@ -54,18 +63,4 @@ char socket_close(int *fd)
     close(*fd);
     *fd = -1;
     return 1;
-}
-
-char    socket_port_used(unsigned short port)
-{
-    int fd;
-
-    if (!socket_init(&fd))
-        return 1;
-    if (!socket_listen(&fd, NET_SERVER_ADDRESS, &port)) {
-        socket_close(&fd);
-        return 1;
-    }
-    socket_close(&fd);
-    return 0;
 }

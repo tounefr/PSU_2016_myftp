@@ -1,3 +1,13 @@
+/*
+** myftp.h for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:06:39 2017 toune
+** Last update Thu May 18 10:06:39 2017 toune
+*/
+
 #ifndef PROJETS_MYFTP_H
 #define PROJETS_MYFTP_H
 

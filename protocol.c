@@ -1,3 +1,12 @@
+/*
+** protocol.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:08:07 2017 toune
+** Last update Thu May 18 10:08:07 2017 toune
+*/
 
 #include <unistd.h>
 #include <stdio.h>
@@ -25,10 +34,8 @@ char        ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client)
 
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 220, FTP_HELLO_MESSAGE);
     while (1) {
-        if (!(buffer = ftp_recv_packet_command(&ftp_client->conn_cmd.socket_fd))) {
-            printf("ftp_recv_packet_command failed\n");
+        if (!(buffer = ftp_recv_packet_command(&ftp_client->conn_cmd.socket_fd)))
             break;
-        }
         i = -1;
         while (++i < CS_CMD_N) {
             if (!strncmp(g_cs_cmd[i].cmd, buffer, strlen(g_cs_cmd[i].cmd))) {

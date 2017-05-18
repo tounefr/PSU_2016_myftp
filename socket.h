@@ -76,58 +76,90 @@ typedef struct s_command_func
     int flags_prechecks;
 } t_command_func;
 
-extern t_ftp_server ftp_server;
-extern t_ftp_client *cur_client;
 extern t_ftp_server *g_ftp_server;
-
 
 // socket.c
 char socket_init(int *fd);
-char socket_accept(int *server_socket, int *client_socket);
-char                    socket_listen(int *server_fd,
-                                      char *listen_address,
-                                      unsigned short *listen_port);
+char socket_accept(int *server_socket,
+                   int *client_socket);
+char socket_listen(int *server_fd,
+                   char *listen_address,
+                   unsigned short *listen_port);
 char socket_close(int *fd);
-char socket_infos(int *socket_fd, t_socket_infos *socket_infos);
+char socket_infos(int *socket_fd,
+                  t_socket_infos *socket_infos);
 char socket_send(int *fd, char *buffer);
 char socket_port_used(unsigned short port);
-char                    socket_connect(int *fd,
-                                       char *ip,
-                                       unsigned short *port);
+char    socket_connect(int *fd,
+                       char *ip,
+                       unsigned short *port);
 
 // protocol.c
-char ftp_client_loop(t_ftp_server *ftp_server, t_ftp_client *ftp_client);
+char ftp_client_loop(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client);
 
 // ftp_socket.c
 
 char *ftp_recv_packet_command(int *fd);
-char send_cmd_response(int *fd, int code, char *content);
+char send_cmd_response(int *fd,
+                       int code,
+                       char *content);
 unsigned short rand_port();
-char listen_data_conn(t_ftp_client *ftp_client, unsigned short *listen_port);
-char send_data_file(t_ftp_client *ftp_client, char *abs_path);
+char listen_data_conn(t_ftp_client *ftp_client,
+                      unsigned short *listen_port);
+char send_data_file(t_ftp_client *ftp_client,
+                    char *abs_path);
 
 // client_cmd.c
 
 # define CS_CMD_N 15
 extern t_command_func g_cs_cmd[];
 
-void on_ftp_user_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_pass_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_cwd_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_cdup_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_quit_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_dele_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_pwd_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_pasv_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_port_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_help_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_noo_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_retr_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_stor_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_ftp_list_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-void on_type_list_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, char *buffer);
-
-// util.c
+void on_ftp_user_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_pass_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_cwd_cmd(t_ftp_server *ftp_server,
+                    t_ftp_client *ftp_client,
+                    char *buffer);
+void on_ftp_cdup_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_quit_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_dele_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_pwd_cmd(t_ftp_server *ftp_server,
+                    t_ftp_client *ftp_client,
+                    char *buffer);
+void on_ftp_pasv_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_port_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_help_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_noo_cmd(t_ftp_server *ftp_server,
+                    t_ftp_client *ftp_client,
+                    char *buffer);
+void on_ftp_retr_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_stor_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_ftp_list_cmd(t_ftp_server *ftp_server,
+                     t_ftp_client *ftp_client,
+                     char *buffer);
+void on_type_list_cmd(t_ftp_server *ftp_server,
+                      t_ftp_client *ftp_client,
+                      char *buffer);
 char exit_error(int returnv);
 char *format_pasv_ipv4_address(char *ipv4);
 char *join_path(char *s1, char *s2);
@@ -135,7 +167,8 @@ char *path_parent_directory(char *path);
 char in_str(char c, char *tokens);
 char *normalize_path(char *path);
 void fatal_error(t_ftp_client *ftp_client);
-char        extract_ip_port(char *str, char **ip, unsigned short *port);
+char        extract_ip_port(char *str, char **ip,
+                            unsigned short *port);
 char check_directory_exists(char *abs_path);
 char        check_file_exists(char *abs_path);
 char *get_path_from_buffer(char *buffer);
@@ -143,8 +176,6 @@ char *extract_buffer_value(char *buffer);
 void        *my_malloc(size_t size);
 char is_number(char *str);
 void malloc_error();
-
-// ftp.c
 void free_ftp_client(t_ftp_client *ftp_client);
 void release_ftp_client(t_ftp_client *client);
 void release_ftp_clients(t_ftp_client **clients);
@@ -156,21 +187,15 @@ t_ftp_client        *new_ftp_client(
         t_ftp_client **clients,
         pid_t pid,
         int client_socket_fd);
-
-
-// ftp_server.c
-char                ftp_server_accept_loop(t_ftp_server *ftp_server);
-char        start_ftp_server(t_ftp_server *ftp_server);
+char ftp_server_accept_loop(t_ftp_server *ftp_server);
+char start_ftp_server(t_ftp_server *ftp_server);
 void init_ftp_server(t_ftp_server *ftp_server, char **av);
-
-// path.c
 char is_absolute_path(char *path);
-
 char *get_path(char *file, t_ftp_client *ftp_client);
-
 char ftp_connect(t_ftp_client *ftp_client,
                  char *ip,
                  unsigned short *port);
-
+char ftp_send_list_file(char *abs_path,
+                        t_ftp_client *ftp_client);
 
 #endif //PROJETS_SOCKET_H

@@ -1,3 +1,12 @@
+/*
+** ftp_data_cmd.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:07:30 2017 toune
+** Last update Thu May 18 10:07:30 2017 toune
+*/
 
 #include "myftp.h"
 
@@ -64,11 +73,6 @@ void        on_ftp_stor_cmd(t_ftp_server *ftp_server, t_ftp_client *ftp_client, 
 
     if (!(abs_path = get_path(buffer, ftp_client)))
         fatal_error(ftp_client);
-    /*if (check_file_exists(abs_path) || check_directory_exists(abs_path)) {
-        //TODO: file already exist
-        printf("file already exist\n");
-        return;
-    }*/
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 150, "Accepted data connection");
     if (!ftp_recv_file(abs_path, &ftp_client->conn_data.socket_fd))
         fatal_error(ftp_client);

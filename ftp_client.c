@@ -1,3 +1,12 @@
+/*
+** ftp_client.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:07:19 2017 toune
+** Last update Thu May 18 10:07:19 2017 toune
+*/
 
 #include "myftp.h"
 
@@ -41,7 +50,7 @@ t_ftp_client        *init_ftp_client(
     ftp_client->cwd = strdup("/");
     ftp_client->conn_data.socket_fd = -1;
     if (!ftp_client->home_path || !ftp_client->cwd)
-        EXIT_ERROR(NULL, "malloc error\n");
+        malloc_error();
     ftp_client->pass = NULL;
     if (!socket_infos(&ftp_client->conn_cmd.socket_fd,
                       &ftp_client->conn_cmd.socket_infos))
@@ -82,8 +91,6 @@ void                release_ftp_clients(t_ftp_client **clients)
     int             status;
     int             returnv;
 
-    return;
-
     prev = NULL;
     client = *clients;
     while (client) {
@@ -98,25 +105,4 @@ void                release_ftp_clients(t_ftp_client **clients)
         prev = client;
         client = next;
     }
-
-    /*
-    while (client) {
-        i++;
-        next = client->next;
-        if ((returnv = waitpid(client->pid, &status, WNOHANG)) > 0) {
-            printf("waitpid : %d\n", returnv);
-            release_ftp_client(client);
-            if (prev)
-                prev->next = next;
-            else
-                *clients = NULL;
-        }
-        else
-            printf("client pid=%d connected\n", client->pid);
-
-        prev = client;
-        client = next;
-    }
-    printf("count : %d\n", i);
-     */
 }

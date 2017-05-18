@@ -1,3 +1,12 @@
+/*
+** ftp_server.c for  in /home/toune/Documents/Epitech/projets/PSU_2016_myftp
+** 
+** Made by toune
+** Login   <thomas.henon@epitech.eu>
+** 
+** Started on  Thu May 18 10:06:18 2017 toune
+** Last update Thu May 18 10:06:19 2017 toune
+*/
 
 #include "myftp.h"
 
@@ -16,12 +25,6 @@ char                ftp_server_accept_loop(t_ftp_server *ftp_server)
                                     &ftp_server->clients,
                                     client_pid,
                                     client_fd);
-        printf("client : %s:%d server : %s:%d\n",
-               ftp_client->conn_cmd.socket_infos.client_ipv4,
-               ftp_client->conn_cmd.socket_infos.client_port,
-               ftp_client->conn_cmd.socket_infos.server_ipv4,
-               ftp_client->conn_cmd.socket_infos.server_port
-        );
         if ((client_pid = fork()) == 0) {
             exit(!ftp_client_loop(ftp_server, ftp_client));
         } else if (client_pid == -1)
@@ -46,7 +49,9 @@ char        start_ftp_server(t_ftp_server *ftp_server)
                        &ftp_server->listen_port))
         return 0;
     ftp_server->running = 1;
-    printf("Listen on %s:%d\n", ftp_server->listen_address, ftp_server->listen_port);
+    printf("Listen on %s:%d\n",
+           ftp_server->listen_address,
+           ftp_server->listen_port);
     returnv = ftp_server_accept_loop(ftp_server);
     if (!socket_close(&ftp_server->server_fd))
         return 0;
