@@ -18,7 +18,7 @@ char                ftp_server_accept_loop(t_ftp_server *ftp_server)
     t_ftp_client    *ftp_client;
 
     while (1) {
-        release_ftp_clients(&ftp_server->clients);
+ //       release_ftp_clients(&ftp_server->clients);
         if (!socket_accept(&ftp_server->server_fd, &client_fd))
             return 0;
         ftp_client = new_ftp_client(ftp_server,

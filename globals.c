@@ -15,7 +15,7 @@ t_command_func g_cs_cmd[CS_CMD_N] = {
     {"PASS",    on_ftp_pass_cmd,    0},
     {"CWD",     on_ftp_cwd_cmd,     PRECHECK_LOGGED},
     {"CDUP",    on_ftp_cdup_cmd,    PRECHECK_LOGGED},
-    {"QUIT",    on_ftp_quit_cmd,    PRECHECK_LOGGED},
+    {"QUIT",    on_ftp_quit_cmd,    0},
     {"DELE",    on_ftp_dele_cmd,    PRECHECK_LOGGED},
     {"PWD",     on_ftp_pwd_cmd,     PRECHECK_LOGGED},
     {"PASV",    on_ftp_pasv_cmd,    PRECHECK_LOGGED},

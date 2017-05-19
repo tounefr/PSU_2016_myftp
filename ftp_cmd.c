@@ -26,6 +26,11 @@ void        on_ftp_user_cmd(t_ftp_server *ftp_server,
 
     if (!(user = extract_buffer_value(buffer)))
         fatal_error(ftp_client);
+    if (strcasecmp(user, "anonymous")) {
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 530,
+                          "Not logged in.");
+        return;
+    }
     if (ftp_client->user)
         free(ftp_client->user);
     printf("Login : %s\n", user);
@@ -34,16 +39,22 @@ void        on_ftp_user_cmd(t_ftp_server *ftp_server,
                       "Please specify the password.");
 }
 
-void on_ftp_pass_cmd(t_ftp_server *ftp_server,
+void        on_ftp_pass_cmd(t_ftp_server *ftp_server,
                      t_ftp_client *ftp_client,
                      char *buffer)
 {
+    char    *pass;
+
+    if (!(pass = extract_buffer_value(buffer)))
+        fatal_error(ftp_client);
+    printf("pass : %s\n", pass);
     if (ftp_client->user == NULL) {
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 332,
                           "Need login first.");
         return;
     }
-    if (!strcasecmp(ftp_client->user, "anonymous")) {
+    if (!strcasecmp(ftp_client->user, "anonymous") &&
+            (!strcasecmp(pass, " ") || !strcasecmp(pass, ""))) {
         ftp_client->is_logged = 1;
         send_cmd_response(&ftp_client->conn_cmd.socket_fd, 230,
                           "Login successful.");

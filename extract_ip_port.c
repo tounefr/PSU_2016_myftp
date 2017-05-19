@@ -17,10 +17,8 @@ char        *format_pasv_ipv4_address(char *ipv4)
     char    *token;
     int     i;
 
-    if (!(ipv4 = strdup(ipv4))) {
-        fprintf(stderr, "malloc error\n");
-        exit(1);
-    }
+    if (!(ipv4 = strdup(ipv4)))
+        malloc_error();
     ipv4_formated = my_malloc(16);
     start = ipv4_formated;
     i = 0;
