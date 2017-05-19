@@ -20,7 +20,7 @@ t_command_func g_cs_cmd[CS_CMD_N] = {
     {"PWD",     on_ftp_pwd_cmd,     PRECHECK_LOGGED},
     {"PASV",    on_ftp_pasv_cmd,    PRECHECK_LOGGED},
     {"PORT",    on_ftp_port_cmd,    PRECHECK_LOGGED},
-    {"HELP",    on_ftp_help_cmd,    0},
+    {"HELP",    on_ftp_help_cmd,    PRECHECK_LOGGED},
     {"NOOP",    on_ftp_noo_cmd,     0},
     {"RETR",    on_ftp_retr_cmd,    PRECHECK_LOGGED},
     {"STOR",    on_ftp_stor_cmd,    PRECHECK_LOGGED},

@@ -15,7 +15,13 @@ void on_ftp_help_cmd(t_ftp_server *ftp_server,
                      char *buffer)
 {
     send_cmd_response(&ftp_client->conn_cmd.socket_fd, 214,
-                      "RTFM");
+                      "The following commands are recognized.\n"
+                      "USER PASS CWD CDUP QUIT DELE PWD PASV PORT "
+                      "HELP NOOP RETR STOR LIST"
+    );
+    send_cmd_response(&ftp_client->conn_cmd.socket_fd, 214,
+                      "Help OK."
+    );
 }
 
 void on_ftp_noo_cmd(t_ftp_server *ftp_server,
