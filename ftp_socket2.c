@@ -32,11 +32,11 @@ static int     index_delimiter_in_buffer(char *buffer) {
     return -1;
 }
 
-static char extend_buffer(char *buffer, int *buffer_size) {
+static char extend_buffer(char **buffer, int *buffer_size) {
     *buffer_size += NET_BUFFER_SIZE;
-    if (!(buffer = realloc(buffer, *buffer_size)))
+    if (!(*buffer = realloc(*buffer, *buffer_size)))
         malloc_error();
-    memset(&buffer[*buffer_size - NET_BUFFER_SIZE], 0, NET_BUFFER_SIZE);
+    memset(&(*buffer[*buffer_size - NET_BUFFER_SIZE]), 0, NET_BUFFER_SIZE);
     return 1;
 }
 
@@ -58,7 +58,7 @@ char        *extract_packet_and_save(char **buffer, int *index_delimiter) {
 char            *ftp_recv_packet_command(int *fd) {
     static char *buffer = NULL;
     char        *packet;
-    static int  buffer_size = NET_BUFFER_SIZE;;
+    static int  buffer_size = NET_BUFFER_SIZE;
     int         readv;
     int         index_delimiter;
 
@@ -69,7 +69,7 @@ char            *ftp_recv_packet_command(int *fd) {
     if (strlen(buffer) == 0)
         return NULL;
     if ((index_delimiter = index_delimiter_in_buffer(buffer)) == -1) {
-        extend_buffer(buffer, &buffer_size);
+        extend_buffer(&buffer, &buffer_size);
         return ftp_recv_packet_command(fd);
     }
     packet = extract_packet_and_save(&buffer, &index_delimiter);
