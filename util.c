@@ -49,3 +49,32 @@ char    in_str(char c, char *tokens)
     }
     return 0;
 }
+
+char        *ftp_cwd_check_path(char *buffer, t_ftp_client *ftp_client)
+{
+    char    *buffer_path;
+    char    *file_path;
+    char    *abs_path;
+    char    *tmp;
+
+    if (!(buffer_path = get_path_from_buffer(buffer)))
+        fatal_error(ftp_client);
+    file_path = buffer_path;
+    if (!is_absolute_path(buffer_path)) {
+        tmp = file_path;
+        if (!(file_path = join_path(ftp_client->cwd, file_path)))
+            fatal_error(ftp_client);
+    }
+    if (!(abs_path = join_path(ftp_client->home_path, file_path)))
+        fatal_error(ftp_client);
+    if (!check_directory_exists(abs_path)) {
+        printf("file not found : %s\n", abs_path);
+        send_cmd_response(&ftp_client->conn_cmd.socket_fd, 550,
+                          "File not found.");
+        free(abs_path);
+        free(file_path);
+        return NULL;
+    }
+    free(abs_path);
+    return file_path;
+}
